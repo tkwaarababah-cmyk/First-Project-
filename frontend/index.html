@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+
+    <!-- Bootstrap CSS -->
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+        rel="stylesheet"
+    >
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ============================== -->
+    <!-- HEADER -->
+    <!-- ============================== -->
+
+    <header class="mb-4">
+        <div class="container">
+            <h1 class="header">💰 User Expense Tracker</h1>
+            <p class="text-muted">Manage your users and track expenses</p>
+        </div>
+
+           
+        <button id="darkModeBtn" class="btn btn-dark">
+    🌙 Dark Mode
+</button>
+
+    </header>
+
+ <main>
+        <!-- ============================== -->
+        <!-- SUMMARY CARDS  css crid -->
+        <!-- ============================== -->
+
+        <div id="summary">
+          
+                <!-- Total Card -->
+                <div class="mb-4">
+                    <div class="card card-custom card-total">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Total</h5>
+                            <p class="card-value" id="total">0 JD</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Count Card -->
+                <div class="mb-4">
+                    <div class="card card-custom card-count">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Count of Expense</h5>
+                            <p class="card-value" id="count">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Highest Card -->
+                <div class="mb-4">
+                    <div class="card card-custom card-highest">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Highest Expense</h5>
+                            <p class="card-value" id="highest">0 JD</p>
+                        </div>
+                    </div>
+                </div>
+
+           
+        </div>
+
+        <!-- ============================== -->
+        <!-- ADD EXPENSE FORM -->
+        <!-- ============================== -->
+
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+
+                    <div class="form-card">
+                        <h3>➕ Add New Expense</h3>
+
+                        <!-- Error Message -->
+                        <div 
+                            id="errorMessage" 
+                            class="alert alert-danger" 
+                            style="display: none;">
+                        </div>
+
+                        <!-- Form -->
+                        <form id="expenseForm" novalidate>
+
+                            <!-- Title Field -->
+                            <div class="mb-3">
+                                <label for="title" class="form-label">
+                                    Title <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="title" 
+                                    placeholder="Example: Coffee"
+                                    required
+                                >
+                                <div class="invalid-feedback" id="titleError"></div>
+                            </div>
+
+                            <!-- Amount Field -->
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">
+                                    Amount (JD) <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    class="form-control" 
+                                    id="amount" 
+                                    placeholder="Example: 5.50"
+                                    step="0.01"
+                                    min="0"
+                                    required
+                                >
+                                <div class="invalid-feedback" id="amountError"></div>
+                            </div>
+
+                            <!-- Category Field -->
+                            <div class="mb-3">
+                                <label for="category" class="form-label">
+                                    Category <span class="required">*</span>
+                                </label>
+                                <select 
+                                    class="form-select" 
+                                    id="category"
+                                    required
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="Food">🍔 Food</option>
+                                    <option value="Transport">🚗 Transport</option>
+                                    <option value="Bills">📄 Bills</option>
+                                    <option value="Entertainment">🎬 Entertainment</option>
+                                    <option value="Other">📦 Other</option>
+                                </select>
+                                <div class="invalid-feedback" id="categoryError"></div>
+                            </div>
+
+                            <!-- Date Field -->
+                            <div class="mb-3">
+                                <label for="date" class="form-label">
+                                    Date <span class="required">*</span>
+                                </label>
+                                <input 
+                                    type="date" 
+                                    class="form-control" 
+                                    id="date"
+                                    required
+                                >
+                                <div class="invalid-feedback" id="dateError"></div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="text-end">
+                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">Submit New Expense</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- EXPENSES TABLE -->
+        <!-- ============================== -->
+
+        <div class="container mb-5">
+
+            <h2 class="mb-4">📋 Expenses List</h2>
+
+            <!-- Category Filter -->
+            <div class="mb-3">
+                <label for="categoryFilter" class="form-label">
+                    Filter by Category
+                </label>
+                <select id="categoryFilter" class="form-select">
+                    <option value="All">All Categories</option>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Bills">📄 Bills</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Other">📦 Other</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesList">
+                        <!-- Expenses will appear here -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ============================== -->
+    <!-- FOOTER -->
+    <!-- ============================== -->
+
+    <footer class="text-center text-black mt-5 py-4">
+        <p>&copy; 2026 Expense Tracker. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
